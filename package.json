@@ -1,0 +1,30 @@
+{
+  "fitbit": {
+    "appUUID": "6f6cda6d-4126-464f-b85b-2479de1ce671",
+    "appType": "clockface",
+    "appDisplayName": "Fit Face",
+    "iconFile": "resources/icon.png",
+    "wipeColor": "",
+    "requestedPermissions": [
+      "access_activity"
+    ],
+    "buildTargets": [
+      "higgs",
+      "meson",
+      "gemini"
+    ],
+    "i18n": {
+      "en": {
+        "name": "Fit Face"
+      }
+    },
+    "defaultLanguage": "en-US"
+  },
+  "devDependencies": {
+    "@fitbit/sdk": "~3.1.0",
+    "@fitbit/sdk-cli": "^1.6.0"
+  },
+  "scripts": {
+    "build": "fitbit-build"
+  }
+}
