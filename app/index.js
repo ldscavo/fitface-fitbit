@@ -15,70 +15,70 @@ const dateLabel = document.getElementById("date-label");
 const tempLabel = document.getElementById("temp-label");
 
 function getDateTime(evt) {
-  return evt.date;
+    return evt.date;
 }
 
 function getSteps() {
-  let steps = 0;
-  if (appbit.permissions.granted("access_activity")) {
-    steps = today.adjusted.steps;
-  }
+    let steps = 0;
+    if (appbit.permissions.granted("access_activity")) {
+        steps = today.adjusted.steps;
+    }
 
-  return steps;
+    return steps;
 }
 
 function getStepGoal() {
-  let goal = 0;
-  if (appbit.permissions.granted("access_activity")) {
-    goal = goals.adjusted.steps;
-  }
+    let goal = 0;
+    if (appbit.permissions.granted("access_activity")) {
+        goal = goals.adjusted.steps;
+    }
 
-  return steps;
+    return steps;
 }
 
 function getTemp() {
-  return 75;
+    return 75;
 }
 
 function updateDateTime(now) {
-  updateTime(now);
-  updateDate(now);
+    updateTime(now);
+    updateDate(now);
 }
 
 function updateTime(now) {
-  let hours = now.getHours();
-  hours = preferences.clockDisplay === "12h" ? hours % 12 || 12 : util.zeroPad(hours);
+    let hours = now.getHours();
+    hours = preferences.clockDisplay === "12h" ? hours % 12 || 12 : util.zeroPad(hours);
 
-  let mins = util.zeroPad(now.getMinutes());
+    let mins = util.zeroPad(now.getMinutes());
 
-  timeLabel.text = `${hours}:${mins}`;
+    timeLabel.text = `${hours}:${mins}`;
 }
 
 function updateDate(now) {
-  let month = util.months[now.getMonth()];
-  let day = util.days[now.getDay()];
-  let date = now.getDate();
+    let month = util.months[now.getMonth()];
+    let day = util.days[now.getDay()];
+    let date = now.getDate();
 
-  dateLabel.text = `${day} ${month} ${date}`;
+    dateLabel.text = `${day} ${month} ${date}`;
 }
 
 function updateSteps() {
-  let steps = getSteps();
-  steps = steps.toLocaleString('en-US');
+    let steps = getSteps();
+    steps = steps.toLocaleString('en-US');
 
-  stepsLabel.text = `${steps} Steps`;
+    stepsLabel.text = `${steps} Steps`;
 }
 
 function updateTemp() {
-  let temp = getTemp();
-  tempLabel.text = `${temp}°F`;
+    let temp = getTemp();
+    tempLabel.text = `${temp}°F`;
 }
 
 // The main tick event loop!
 clock.ontick = (evt) => {
-  let now = getDateTime(evt);
-  
-  updateDateTime(now);
-  updateSteps();
-  updateTemp();
+    let now = getDateTime(evt);
+
+    updateDateTime(now);
+    updateSteps();
+    updateTemp();
 }
