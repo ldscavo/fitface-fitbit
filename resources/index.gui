@@ -2,4 +2,5 @@
   <text id="steps-label" class="minor-label color-secondary" />
   <text id="time-label" class="color-primary" />
   <text id="date-label" class="minor-label color-primary" />
+  <text id="temp-label" class="minor-label color-secondary" />
 </svg>

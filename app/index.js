@@ -12,6 +12,7 @@ clock.granularity = "minutes";
 const timeLabel = document.getElementById("time-label");
 const stepsLabel = document.getElementById("steps-label");
 const dateLabel = document.getElementById("date-label");
+const tempLabel = document.getElementById("temp-label");
 
 function getDateTime(evt) {
   return evt.date;
@@ -34,7 +35,11 @@ function getStepGoal() {
 
   return steps;
 }
-  
+
+function getTemp() {
+  return 75;
+}
+
 function updateDateTime(now) {
   updateTime(now);
   updateDate(now);
@@ -64,10 +69,16 @@ function updateSteps() {
   stepsLabel.text = `${steps} Steps`;
 }
 
+function updateTemp() {
+  let temp = getTemp();
+  tempLabel.text = `${temp}°F`;
+}
+
 // The main tick event loop!
 clock.ontick = (evt) => {
   let now = getDateTime(evt);
   
   updateDateTime(now);
   updateSteps();
+  updateTemp();
 }

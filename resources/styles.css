@@ -21,7 +21,7 @@
   text-length: 15;
   
   x: 50%;
-  y: 50%-65;
+  y: 50%-70;
 }
 
 #time-label {
@@ -39,4 +39,10 @@
   
   x: 50%;
   y: 50%+50;
+}
+
+#temp-label {
+  text-length: 8;
+  x: 50%;
+  y: 50%+90;
 }
