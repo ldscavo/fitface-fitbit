@@ -3,6 +3,7 @@ import document from "document";
 import { preferences } from "user-settings";
 import { me as appbit } from "appbit";
 import { today, goals } from "user-activity";
+import * as messaging from "messaging";
 import * as util from "../common/utils";
 
 // Update the clock every minute
@@ -36,10 +37,6 @@ function getStepGoal() {
     return steps;
 }
 
-function getTemp() {
-    return 75;
-}
-
 function updateDateTime(now) {
     updateTime(now);
     updateDate(now);
@@ -69,9 +66,42 @@ function updateSteps() {
     stepsLabel.text = `${steps} Steps`;
 }
 
-function updateTemp() {
-    let temp = getTemp();
+function updateTemp(temp) {
     tempLabel.text = `${temp}°F`;
+}
+
+// Request weather data from the companion
+function fetchWeather() {
+    if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
+        // Send a command to the companion
+        messaging.peerSocket.send({
+            command: 'weather'
+        });
+    }
+}
+
+// Display the weather data received from the companion
+function processWeatherData(data) {
+    updateTemp(data.temperature);
+}
+
+// Listen for the onopen event
+messaging.peerSocket.onopen = function () {
+    // Fetch weather when the connection opens
+    fetchWeather();
+}
+
+// Listen for messages from the companion
+messaging.peerSocket.onmessage = function (evt) {
+    if (evt.data) {
+        processWeatherData(evt.data);
+    }
+}
+
+// Listen for the onerror event
+messaging.peerSocket.onerror = function (err) {
+    // Handle any errors
+    console.log("Connection error: " + err.code + " - " + err.message);
 }
 
 // The main tick event loop!
@@ -80,5 +110,8 @@ clock.ontick = (evt) => {
 
     updateDateTime(now);
     updateSteps();
-    updateTemp();
+    //updateTemp();
 }
+
+// Fetch the weather every 30 minutes
+setInterval(fetchWeather, 30 * 1000 * 60);
