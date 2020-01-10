@@ -1,6 +1,7 @@
 <svg class="background">
   <arc id="bg-circle" class="bg-color-circle" />
-  <arc id="steps-circle" class="steps-color-circle" sweep-angle="230" />
+  <circle id="fill-circle" class="fill-color-circle" />
+  <arc id="steps-circle" class="steps-color-circle" />
   <text id="steps-label" class="minor-label color-secondary" />
   <text id="time-label" class="color-primary" />
   <text id="date-label" class="minor-label color-primary" />
