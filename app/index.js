@@ -18,11 +18,11 @@ const tempLabel = document.getElementById("temp-label");
 // The svg object for the step progress circle
 const stepsCircle = document.getElementById("steps-circle");
 
-function getDateTime(evt) {
+var getDateTime = function(evt) {
   return evt.date;
 }
 
-function getSteps() {
+var getSteps = function() {
   let steps = 0;
   if (appbit.permissions.granted("access_activity")) {
     steps = today.adjusted.steps;
@@ -36,12 +36,12 @@ var getStepGoal = () =>
     ? goals.steps : 0;
 
 
-function updateDateTime(now) {
+var updateDateTime = function(now) {
   updateTime(now);
   updateDate(now);
 }
 
-function updateTime(now) {
+var updateTime = function(now) {
   let hours = now.getHours();
   hours = preferences.clockDisplay === "12h" ? hours % 12 || 12 : util.zeroPad(hours);
 
@@ -57,7 +57,7 @@ var updateStepCircle = function () {
   stepsCircle.sweepAngle = stepGoalAngle(steps, goal);
 }
 
-function updateDate(now) {
+var updateDate = function(now) {
   let month = util.months[now.getMonth()];
   let day = util.days[now.getDay()];
   let date = now.getDate();
@@ -65,7 +65,7 @@ function updateDate(now) {
   dateLabel.text = `${day} ${month} ${date}`;
 }
 
-function updateSteps() {
+var updateSteps = function() {
   let steps = getSteps();
   steps = steps.toLocaleString('en-US');
 
@@ -75,12 +75,12 @@ function updateSteps() {
 var stepGoalAngle = (count, goal) =>
   goal > count ? 360 * count / goal : 360;
 
-function updateTemp(temp) {
+var updateTemp = function(temp) {
   tempLabel.text = `${temp}°F`;
 }
 
 // Request weather data from the companion
-function fetchWeather() {
+var fetchWeather = function() {
   if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
     // Send a command to the companion
     messaging.peerSocket.send({
@@ -90,7 +90,7 @@ function fetchWeather() {
 }
 
 // Display the weather data received from the companion
-function processWeatherData(data) {
+var processWeatherData = function(data) {
   updateTemp(data.temperature);
 }
 
