@@ -15,6 +15,9 @@ const stepsLabel = document.getElementById("steps-label");
 const dateLabel = document.getElementById("date-label");
 const tempLabel = document.getElementById("temp-label");
 
+// The svg object for the step progress circle
+const stepsCircle = document.getElementById("steps-circle");
+
 function getDateTime(evt) {
     return evt.date;
 }
@@ -28,14 +31,10 @@ function getSteps() {
     return steps;
 }
 
-function getStepGoal() {
-    let goal = 0;
-    if (appbit.permissions.granted("access_activity")) {
-        goal = goals.adjusted.steps;
-    }
-
-    return steps;
-}
+var getStepGoal = () =>
+    appbit.permissions.granted("access_activity")
+        ? goals.steps : 0;
+    
 
 function updateDateTime(now) {
     updateTime(now);
@@ -49,6 +48,13 @@ function updateTime(now) {
     let mins = util.zeroPad(now.getMinutes());
 
     timeLabel.text = `${hours}:${mins}`;
+}
+
+var updateStepCircle = function() {
+    let steps = getSteps();
+    let goal = getStepGoal();
+
+    stepsCircle.sweepAngle = stepGoalAngle(steps, goal);
 }
 
 function updateDate(now) {
@@ -65,6 +71,9 @@ function updateSteps() {
 
     stepsLabel.text = `${steps} Steps`;
 }
+
+var stepGoalAngle = (count, goal) =>
+    goal > count ? 360 * count / goal : 360;
 
 function updateTemp(temp) {
     tempLabel.text = `${temp}°F`;
@@ -110,6 +119,7 @@ clock.ontick = (evt) => {
 
     updateDateTime(now);
     updateSteps();
+    updateStepCircle();
     //updateTemp();
 }
 
