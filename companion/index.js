@@ -13,9 +13,9 @@ function locationSuccess(pos) {
     fetch(url).then(function (response) {
         response.json().then(function (data) {
             var weather = {
-                temperature: data["main"]["temp"]
+                temperature: parseInt(data["main"]["temp"])
             }
-
+            
             returnWeatherData(weather);
         });
     });

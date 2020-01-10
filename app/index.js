@@ -120,7 +120,6 @@ clock.ontick = (evt) => {
   updateDateTime(now);
   updateSteps();
   updateStepCircle();
-  //updateTemp();
 }
 
 // Fetch the weather every 30 minutes
