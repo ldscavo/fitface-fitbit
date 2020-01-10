@@ -19,108 +19,108 @@ const tempLabel = document.getElementById("temp-label");
 const stepsCircle = document.getElementById("steps-circle");
 
 function getDateTime(evt) {
-    return evt.date;
+  return evt.date;
 }
 
 function getSteps() {
-    let steps = 0;
-    if (appbit.permissions.granted("access_activity")) {
-        steps = today.adjusted.steps;
-    }
+  let steps = 0;
+  if (appbit.permissions.granted("access_activity")) {
+    steps = today.adjusted.steps;
+  }
 
-    return steps;
+  return steps;
 }
 
 var getStepGoal = () =>
-    appbit.permissions.granted("access_activity")
-        ? goals.steps : 0;
-    
+  appbit.permissions.granted("access_activity")
+    ? goals.steps : 0;
+
 
 function updateDateTime(now) {
-    updateTime(now);
-    updateDate(now);
+  updateTime(now);
+  updateDate(now);
 }
 
 function updateTime(now) {
-    let hours = now.getHours();
-    hours = preferences.clockDisplay === "12h" ? hours % 12 || 12 : util.zeroPad(hours);
+  let hours = now.getHours();
+  hours = preferences.clockDisplay === "12h" ? hours % 12 || 12 : util.zeroPad(hours);
 
-    let mins = util.zeroPad(now.getMinutes());
+  let mins = util.zeroPad(now.getMinutes());
 
-    timeLabel.text = `${hours}:${mins}`;
+  timeLabel.text = `${hours}:${mins}`;
 }
 
-var updateStepCircle = function() {
-    let steps = getSteps();
-    let goal = getStepGoal();
+var updateStepCircle = function () {
+  let steps = getSteps();
+  let goal = getStepGoal();
 
-    stepsCircle.sweepAngle = stepGoalAngle(steps, goal);
+  stepsCircle.sweepAngle = stepGoalAngle(steps, goal);
 }
 
 function updateDate(now) {
-    let month = util.months[now.getMonth()];
-    let day = util.days[now.getDay()];
-    let date = now.getDate();
+  let month = util.months[now.getMonth()];
+  let day = util.days[now.getDay()];
+  let date = now.getDate();
 
-    dateLabel.text = `${day} ${month} ${date}`;
+  dateLabel.text = `${day} ${month} ${date}`;
 }
 
 function updateSteps() {
-    let steps = getSteps();
-    steps = steps.toLocaleString('en-US');
+  let steps = getSteps();
+  steps = steps.toLocaleString('en-US');
 
-    stepsLabel.text = `${steps} Steps`;
+  stepsLabel.text = `${steps} Steps`;
 }
 
 var stepGoalAngle = (count, goal) =>
-    goal > count ? 360 * count / goal : 360;
+  goal > count ? 360 * count / goal : 360;
 
 function updateTemp(temp) {
-    tempLabel.text = `${temp}°F`;
+  tempLabel.text = `${temp}°F`;
 }
 
 // Request weather data from the companion
 function fetchWeather() {
-    if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
-        // Send a command to the companion
-        messaging.peerSocket.send({
-            command: 'weather'
-        });
-    }
+  if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
+    // Send a command to the companion
+    messaging.peerSocket.send({
+      command: 'weather'
+    });
+  }
 }
 
 // Display the weather data received from the companion
 function processWeatherData(data) {
-    updateTemp(data.temperature);
+  updateTemp(data.temperature);
 }
 
 // Listen for the onopen event
 messaging.peerSocket.onopen = function () {
-    // Fetch weather when the connection opens
-    fetchWeather();
+  // Fetch weather when the connection opens
+  fetchWeather();
 }
 
 // Listen for messages from the companion
 messaging.peerSocket.onmessage = function (evt) {
-    if (evt.data) {
-        processWeatherData(evt.data);
-    }
+  if (evt.data) {
+    processWeatherData(evt.data);
+  }
 }
 
 // Listen for the onerror event
 messaging.peerSocket.onerror = function (err) {
-    // Handle any errors
-    console.log("Connection error: " + err.code + " - " + err.message);
+  // Handle any errors
+  console.log("Connection error: " + err.code + " - " + err.message);
 }
 
 // The main tick event loop!
 clock.ontick = (evt) => {
-    let now = getDateTime(evt);
+  let now = getDateTime(evt);
 
-    updateDateTime(now);
-    updateSteps();
-    updateStepCircle();
-    //updateTemp();
+  updateDateTime(now);
+  updateSteps();
+  updateStepCircle();
+  //updateTemp();
 }
 
 // Fetch the weather every 30 minutes
