@@ -4,7 +4,11 @@ import { preferences } from "user-settings";
 import { me as appbit } from "appbit";
 import { today, goals } from "user-activity";
 import * as messaging from "messaging";
-import { zeroPad, days, months, WeatherResponse} from "../common/utils";
+import {
+  zeroPad,
+  days,
+  months,WeatherResponse
+} from "../common/utils";
 
 // Update the clock every minute
 clock.granularity = "minutes";
@@ -20,14 +24,12 @@ const stepsCircle = document.getElementById("steps-circle") as ArcElement;
 
 var getDateTime = (evnt: TickEvent) => evnt.date;
 
-var getSteps = (): number =>
-  // @ts-ignore
+var getSteps = () =>
   appbit.permissions.granted("access_activity")
     ? today.adjusted.steps ?? 0
     : 0;
 
 var getStepGoal = () =>
-  // @ts-ignore
   appbit.permissions.granted("access_activity")
     ? goals.steps ?? 0
     : 0;

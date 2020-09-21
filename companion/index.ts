@@ -1,38 +1,12 @@
 import * as messaging from "messaging";
 import { geolocation } from "geolocation";
-import { WeatherResponse } from '../common/utils';
-
-let locationSuccess = (pos: Position) => {
-  let apiKey = "499b4f8b067ddc0eac377f41fd5c7a7e";
-  let queryParams = `units=imperial&appid=${apiKey}&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`;
-  var url = `https://api.openweathermap.org/data/2.5/weather?${queryParams}`;
-
-  fetch(url).then(function (response) {
-    response.json().then(function (data) {
-      var weather = {
-        temperature: parseInt(data["main"]["temp"])
-      }
-
-      returnWeatherData(weather);
-    });
-  });
-}
-
-// Send the weather data to the device
-let returnWeatherData = (data: WeatherResponse) => {
-  if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
-    // Send a command to the device
-    messaging.peerSocket.send(data);
-  } else {
-    console.log("Error: Connection is not open");
-  }
-}
+import { getWeatherData } from "./weather" 
 
 // Listen for messages from the device
 messaging.peerSocket.onmessage = function (evnt) {
   if (evnt.data && evnt.data.command == "weather") {
     // The device requested weather data
-    geolocation.getCurrentPosition(locationSuccess);
+    geolocation.getCurrentPosition(getWeatherData);
   }
 }
 
